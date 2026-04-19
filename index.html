@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>ネット版！蟲神器 ver1.0 (AI Mimic & Multi Fix)</title>
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ネット版！蟲神器 ver1.0 (AI Mimic & Multi Fix)</title>
 <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
 
 <link rel="stylesheet" href="style.css">
@@ -12,7 +12,8 @@ html, body {
     padding: 0;
     background: #050a05;
 }
-#game-container {
+/* スマホ縮小時のみ適用（JS側でclassを付与） */
+body.scaled #game-container {
     position: absolute !important;
     top: 0 !important;
     left: 0 !important;
@@ -29,11 +30,22 @@ html, body {
         var vw = document.documentElement.clientWidth;
         var vh = document.documentElement.clientHeight;
         var scale = Math.min(vw/GW, vh/GH, 1);
-        var tx = Math.round((vw - GW*scale)/2);
-        var ty = Math.round((vh - GH*scale)/2);
-        el.style.transform = 'scale('+scale+')';
-        el.style.left = tx+'px';
-        el.style.top  = ty+'px';
+        if(scale < 1){
+            // スマホ：縮小してabsoluteで中央配置
+            document.body.classList.add('scaled');
+            var tx = Math.round((vw - GW*scale)/2);
+            var ty = Math.round((vh - GH*scale)/2);
+            el.style.transform = 'scale('+scale+')';
+            el.style.left = tx+'px';
+            el.style.top  = ty+'px';
+        } else {
+            // PC：元のflexセンタリングに戻す
+            document.body.classList.remove('scaled');
+            el.style.transform = '';
+            el.style.left = '';
+            el.style.top  = '';
+            el.style.position = '';
+        }
     }
     window.addEventListener('DOMContentLoaded', fit);
     window.addEventListener('resize', fit);

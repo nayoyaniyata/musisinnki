@@ -5101,7 +5101,6 @@ const AVATARS = ['__KABUTO__','__HIRATA__','🐝','🐞','🦗','🦟','🐜','�
 let _avPickerOpen = false;
 
 function openAccount() {
-    try { _playAccountSE1(); } catch(e) {}
     const deckBtnAcct = document.getElementById('deck-build-btn');
     removeFallingCards();
     const a = getAcct();
@@ -5157,37 +5156,14 @@ function openAccount() {
         });
     });
 
-    // フェーズ1: クローンが目的地に到着したら円状枠を展開
-    setTimeout(() => {
-        // クローンを消す（同化）- 3秒後（確認用）
-        setTimeout(() => { clone.remove(); document.body.classList.remove('clone-active'); }, 1500);
-        cb.style.visibility = 'hidden';
+    // フェーズ1: PC はフェードのみ、モバイルは拡大アニメ
+    const _isMobileAnim = document.body.classList.contains('is-mobile');
 
-        // 円状枠をアイコン位置から展開
-        const cb2 = document.getElementById('account-circle-btn');
+    function _showAccountScreen() {
         const border = document.getElementById('acct-circle-border');
-        border.style.display = 'block';
-        border.style.width = '60px';
-        border.style.height = '60px';
-        border.style.borderRadius = '50%';
-        border.style.left = (targetLeft + 30) + 'px';
-        border.style.top  = (targetTop + 30) + 'px';
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-            border.style.transform = 'translate(-50%, -50%) scale(1)';
-            // 0.35秒後：円から自然にアカウント画面サイズへ一気に変形
-            setTimeout(() => {
-                border.style.transition = 'width 0.55s cubic-bezier(0.4,0,0.2,1), height 0.55s cubic-bezier(0.4,0,0.2,1), border-radius 0.55s cubic-bezier(0.4,0,0.2,1), left 0.55s cubic-bezier(0.4,0,0.2,1), top 0.55s cubic-bezier(0.4,0,0.2,1)';
-                try { _playAccountSE1(); } catch(e) {}
-                border.style.width = '480px';
-                border.style.height = '740px';
-                border.style.borderRadius = '20px';
-                border.style.left = (containerRect.width / 2) + 'px';
-                border.style.top  = (containerRect.height / 2) + 'px';
-
-                // 0.6秒後（変形0.55+余裕）にアカウント画面を表示
-                setTimeout(() => {
-                    border.style.opacity = '0';
-                    setTimeout(() => { border.style.display = 'none'; border.style.opacity = '1'; border.style.transform = 'translate(-50%,-50%) scale(0)'; border.style.transition = ''; }, 300);
+        if (border) { border.style.display = 'none'; border.style.opacity = '1'; border.style.transform = 'translate(-50%,-50%) scale(0)'; border.style.transition = ''; }
+        clone.remove();
+        document.body.classList.remove('clone-active');
 
                     const sa = document.getElementById('screen-account');
                     sa.innerHTML = `
@@ -5226,17 +5202,44 @@ function openAccount() {
         <div class="acct-panel" id="apanel-settings"></div>
 
     `;
-                    try { _playAccountSE2(); } catch(e) {}
-                    sa.classList.remove('hidden');
-                    sa.classList.add('animating');
-                    requestAnimationFrame(() => requestAnimationFrame(() => {
-                        sa.classList.add('open');
-                        document.getElementById('acct-back-btn').style.display = 'block';
-                    }));
-                }, 600);
-            }, 350);
+        try { _playAccountSE2(); } catch(e) {}
+        sa.classList.remove('hidden');
+        sa.classList.add('animating');
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+            sa.classList.add('open');
+            document.getElementById('acct-back-btn').style.display = 'block';
         }));
-    }, 300);
+    }
+
+    if (_isMobileAnim) {
+        // モバイル：拡大アニメーション
+        const border = document.getElementById('acct-circle-border');
+        border.style.display = 'block';
+        border.style.width = '60px';
+        border.style.height = '60px';
+        border.style.borderRadius = '50%';
+        border.style.left = (targetLeft + 30) + 'px';
+        border.style.top  = (targetTop + 30) + 'px';
+        setTimeout(() => {
+            requestAnimationFrame(() => requestAnimationFrame(() => {
+                border.style.transform = 'translate(-50%, -50%) scale(1)';
+                setTimeout(() => {
+                    border.style.transition = 'width 0.55s cubic-bezier(0.4,0,0.2,1), height 0.55s cubic-bezier(0.4,0,0.2,1), border-radius 0.55s cubic-bezier(0.4,0,0.2,1), left 0.55s cubic-bezier(0.4,0,0.2,1), top 0.55s cubic-bezier(0.4,0,0.2,1)';
+                    try { _playAccountSE1(); } catch(e) {}
+                    border.style.width = '480px';
+                    border.style.height = '740px';
+                    border.style.borderRadius = '20px';
+                    border.style.left = (containerRect.width / 2) + 'px';
+                    border.style.top  = (containerRect.height / 2) + 'px';
+                    setTimeout(() => { _showAccountScreen(); }, 600);
+                }, 350);
+            }));
+        }, 300);
+    } else {
+        // PC：即フェード表示（アニメなし）
+        cb.style.visibility = 'hidden';
+        _showAccountScreen();
+    }
 
 }
 

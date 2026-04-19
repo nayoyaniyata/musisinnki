@@ -5660,28 +5660,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const vw = window.innerWidth;
         const vh = window.innerHeight;
+        const scale = Math.min(vw / GAME_W, vh / GAME_H, 1);
 
-        const scaleX = vw / GAME_W;
-        const scaleY = vh / GAME_H;
-        const scale  = Math.min(scaleX, scaleY, 1); // PCでは拡大しない
+        // transform-origin を top left にして、position:absolute で中央配置
+        // これにより「1000px分の幅を確保したまま右にはみ出す」問題を解消
+        el.style.transformOrigin = 'top left';
+        el.style.transform = `scale(${scale.toFixed(6)})`;
+        el.style.position = 'absolute';
+        el.style.left = Math.round((vw - GAME_W * scale) / 2) + 'px';
+        el.style.top  = Math.round((vh - GAME_H * scale) / 2) + 'px';
+        el.style.margin = '0';
 
-        el.style.transform = scale < 1
-            ? `scale(${scale.toFixed(4)})`
-            : '';
-
-        // コンテナを縮小した分、bodyの高さをスケール後の実サイズに合わせる
-        // （スクロールが出ないように）
-        const scaledH = Math.round(GAME_H * scale);
-        const scaledW = Math.round(GAME_W * scale);
-        el.style.marginTop = Math.max(0, Math.floor((vh - scaledH) / 2)) + 'px';
-        el.style.marginLeft = Math.max(0, Math.floor((vw - scaledW) / 2)) + 'px';
-        el.style.marginRight = '0';
-        document.body.style.justifyContent = 'flex-start';
+        // bodyはスクロールさせない
+        document.body.style.overflow = 'hidden';
+        document.body.style.width  = '100vw';
+        document.body.style.height = '100vh';
     }
 
     window.addEventListener('resize', fitGameContainer);
     window.addEventListener('orientationchange', function() {
-        setTimeout(fitGameContainer, 100); // 向き変更後に再計算
+        setTimeout(fitGameContainer, 150);
     });
 
     if (document.readyState === 'loading') {

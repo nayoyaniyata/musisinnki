@@ -1862,11 +1862,13 @@ transform: rotate(90deg) !important;
 
         /* ===== スマートフォン対応：縮小フィット ===== */
         body {
-            align-items: center;
-            min-height: 100dvh;
-            min-height: 100vh;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            display: block; /* flexのcentering干渉を防ぐ */
         }
         #game-container {
-            transform-origin: top center;
-            flex-shrink: 0;
+            position: absolute;
+            /* JS側でleft/top/transformを動的に設定 */
         }

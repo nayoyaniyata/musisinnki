@@ -3,6 +3,43 @@
 
 <link rel="stylesheet" href="style.css">
 
+<style>
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    background: #050a05;
+}
+#game-container {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    transform-origin: top left !important;
+    margin: 0 !important;
+}
+</style>
+<script>
+(function(){
+    var GW = 1000, GH = 850;
+    function fit(){
+        var el = document.getElementById('game-container');
+        if(!el) return;
+        var vw = document.documentElement.clientWidth;
+        var vh = document.documentElement.clientHeight;
+        var scale = Math.min(vw/GW, vh/GH, 1);
+        var tx = Math.round((vw - GW*scale)/2);
+        var ty = Math.round((vh - GH*scale)/2);
+        el.style.transform = 'scale('+scale+')';
+        el.style.left = tx+'px';
+        el.style.top  = ty+'px';
+    }
+    window.addEventListener('DOMContentLoaded', fit);
+    window.addEventListener('resize', fit);
+    window.addEventListener('orientationchange', function(){ setTimeout(fit,200); });
+})();
+</script>
 </head><body onclick="initAudio(); handleGlobalClick(event)"><div id="game-container"><div id="shake-wrapper"><div id="timer-container">
   <svg id="timer-svg" viewBox="0 0 60 60" width="60" height="60">
     <!-- 最外リング（細い白線） -->

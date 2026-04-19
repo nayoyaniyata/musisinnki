@@ -5649,42 +5649,4 @@ document.addEventListener('DOMContentLoaded', function() {
     })();
 });
 
-// ===== スマートフォン対応：縮小フィット =====
-(function() {
-    const GAME_W = 1000;
-    const GAME_H = 850;
 
-    function fitGameContainer() {
-        const el = document.getElementById('game-container');
-        if (!el) return;
-
-        const vw = window.innerWidth;
-        const vh = window.innerHeight;
-        const scale = Math.min(vw / GAME_W, vh / GAME_H, 1);
-
-        // transform-origin を top left にして、position:absolute で中央配置
-        // これにより「1000px分の幅を確保したまま右にはみ出す」問題を解消
-        el.style.transformOrigin = 'top left';
-        el.style.transform = `scale(${scale.toFixed(6)})`;
-        el.style.position = 'absolute';
-        el.style.left = Math.round((vw - GAME_W * scale) / 2) + 'px';
-        el.style.top  = Math.round((vh - GAME_H * scale) / 2) + 'px';
-        el.style.margin = '0';
-
-        // bodyはスクロールさせない
-        document.body.style.overflow = 'hidden';
-        document.body.style.width  = '100vw';
-        document.body.style.height = '100vh';
-    }
-
-    window.addEventListener('resize', fitGameContainer);
-    window.addEventListener('orientationchange', function() {
-        setTimeout(fitGameContainer, 150);
-    });
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', fitGameContainer);
-    } else {
-        fitGameContainer();
-    }
-})();

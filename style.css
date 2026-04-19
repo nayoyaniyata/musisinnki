@@ -1860,15 +1860,4 @@ transform: rotate(90deg) !important;
             width: 100%; height: 100%; object-fit: contain; border-radius: 0; display: block; transform: scale(1.18);
         }
 
-        /* ===== スマートフォン対応：縮小フィット ===== */
-        body {
-            overflow: hidden;
-            width: 100vw;
-            height: 100vh;
-            position: relative;
-            display: block; /* flexのcentering干渉を防ぐ */
-        }
-        #game-container {
-            position: absolute;
-            /* JS側でleft/top/transformを動的に設定 */
-        }
+

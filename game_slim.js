@@ -119,11 +119,11 @@ function hideTurnMsgIfMyTurn() {
         playBGM: function(url) {
             this.init(); this.stopBGM(); 
             this.bgmAudio = new Audio(); this.bgmAudio.src = url; this.bgmAudio.loop = true;
-            this.bgmAudio.volume = (gameSettings.bgmVol / 100) * 0.3;
+            this.bgmAudio.volume = (gameSettings.bgmVol / 100) * 0.15;
             const pp = this.bgmAudio.play(); if (pp !== undefined) pp.catch(e => console.log("Click to play"));
         },
         stopBGM: function() { if (this.bgmAudio) { this.bgmAudio.pause(); this.bgmAudio = null; } },
-        updateVolumes: function() { if (this.bgmAudio) this.bgmAudio.volume = (gameSettings.bgmVol / 100) * 0.3; },
+        updateVolumes: function() { if (this.bgmAudio) this.bgmAudio.volume = (gameSettings.bgmVol / 100) * 0.15; },
         playSE: function(type) {
             this.init();
             const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
@@ -2125,7 +2125,7 @@ state.netGameInitDone = false;
         state.mode = null;
         // すでにタイトルBGMが流れているなら作り直さない（先頭に戻さず継続）
         if (AudioSys.bgmAudio && AudioSys.bgmAudio.src && AudioSys.bgmAudio.src.includes(gameSettings.titleBgm)) {
-            try { AudioSys.bgmAudio.volume = (gameSettings.bgmVol / 100) * 0.3; } catch(e) {}
+            try { AudioSys.bgmAudio.volume = (gameSettings.bgmVol / 100) * 0.15; } catch(e) {}
             if (AudioSys.bgmAudio.paused) {
                 AudioSys.bgmAudio.play().catch(()=>{});
             }
@@ -5101,6 +5101,7 @@ const AVATARS = ['__KABUTO__','__HIRATA__','🐝','🐞','🦗','🦟','🐜','�
 let _avPickerOpen = false;
 
 function openAccount() {
+    try { _playAccountSE1(); } catch(e) {}
     const deckBtnAcct = document.getElementById('deck-build-btn');
     removeFallingCards();
     const a = getAcct();
@@ -5649,4 +5650,49 @@ document.addEventListener('DOMContentLoaded', function() {
     })();
 });
 
+// ===== スマートフォン対応：縮小フィット =====
+(function() {
+    const GAME_W = 1000;
+    const GAME_H = 850;
 
+    function isMobile() {
+        return window.innerWidth < 768 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    }
+
+    function fitGameContainer() {
+        const el = document.getElementById('game-container');
+        if (!el) return;
+
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const mobile = isMobile();
+
+        document.body.classList.toggle('is-mobile', mobile);
+
+        const scale = mobile
+            ? Math.min(vw / GAME_W, vh / GAME_H)
+            : Math.min(vw / GAME_W, vh / GAME_H, 1);
+
+        el.style.transformOrigin = 'top left';
+        el.style.transform = `scale(${scale.toFixed(6)})`;
+        el.style.position = 'absolute';
+        el.style.left = Math.round((vw - GAME_W * scale) / 2) + 'px';
+        el.style.top  = Math.round((vh - GAME_H * scale) / 2) + 'px';
+        el.style.margin = '0';
+
+        document.body.style.overflow = 'hidden';
+        document.body.style.width  = '100vw';
+        document.body.style.height = '100vh';
+    }
+
+    window.addEventListener('resize', fitGameContainer);
+    window.addEventListener('orientationchange', function() {
+        setTimeout(fitGameContainer, 150);
+    });
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', fitGameContainer);
+    } else {
+        fitGameContainer();
+    }
+})();

@@ -1,10 +1,1 @@
-<img width="571" height="798" alt="クロウスタビガ♀" src="https://github.com/user-attachments/assets/fd3bf009-aaff-4b5a-8ab4-b4d2352519c0" />
-<img width="571" height="796" alt="クスサン♂" src="https://github.com/user-attachments/assets/4ae892fe-1976-460b-af94-49c91f6852d3" />
-<img width="572" height="795" alt="クスサン♀" src="https://github.com/user-attachments/assets/4a843d1e-d6ac-48da-b644-c7211edf8498" />
-<img width="500" height="702" alt="カブトムシ♀" src="https://github.com/user-attachments/assets/e6f14cc3-f816-462a-a4f8-03fca7a87973" />
-<img width="613" height="856" alt="オオミズアオ♂" src="https://github.com/user-attachments/assets/86caa7ad-8c64-4a51-80d5-7936c1cf9bbd" />
-<img width="570" height="796" alt="オオシロシタバ♀" src="https://github.com/user-attachments/assets/64b15aea-edd4-4fff-8a81-7f0d9ffaa434" />
-<img width="613" height="856" alt="カード裏面" src="https://github.com/user-attachments/assets/8bcc4ac0-74d1-4174-b7d5-cd87a0eb80dc" />
-<img width="613" height="856" alt="エゾゼミ♀" src="https://github.com/user-attachments/assets/ed0ecb5c-1e57-41d8-b6a0-6945c9985e43" />
-<img width="614" height="855" alt="ウスタビガ♂" src="https://github.com/user-attachments/assets/286d7d4e-ed03-4f94-89cb-3e9e1cf830f4" />
-<img width="612" height="855" alt="ウスタビガ♀" src="https://github.com/user-attachments/assets/80fa90f5-0f81-4198-a597-36c8ee413257" />
+
